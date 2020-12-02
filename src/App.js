@@ -7,8 +7,10 @@ import UserDetails from './components/UserDetails';
 import Search from './components/Search';
 import About from './components/About';
 import axios from 'axios';
+import { useAlert } from 'react-alert';
 
 const App = () => {
+    const alert = useAlert();
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
@@ -36,7 +38,8 @@ const App = () => {
                         .join('&'),
             })
             .then(({ data: { items } }) => setUsers(items))
-            .then(() => setLoading(false));
+            .catch(() => alert.show('Something gone wrong, please try again'))
+            .finally(() => setLoading(false));
     };
     const clearUsers = () => {
         setUsers([]);
@@ -52,7 +55,8 @@ const App = () => {
                 },
             })
             .then(({ data }) => setUser(data))
-            .then(() => setLoading(false));
+            .catch(() => alert.show("Something's gone wrong. Please try again"))
+            .finally(() => setLoading(false));
     };
     useEffect(() => {
         axios
@@ -63,7 +67,8 @@ const App = () => {
                 },
             })
             .then(({ data }) => setUsers(data))
-            .then(() => setLoading(false));
+            .catch(() => alert.show("Something's gone wrong. Please refresh!"))
+            .finally(() => setLoading(false));
     }, []);
 
     return (
