@@ -230,9 +230,10 @@ button {
 }
 
 div>label {
-  margin: 2.5rem;
-  width: 55px;
+  margin-top: 1.6rem;
+  margin-right: 2.5rem;
+  width: 60px;
 }
 div>input {
-  width: 700px;
+  max-width: 300px;
 }
