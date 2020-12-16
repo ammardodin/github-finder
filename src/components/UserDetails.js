@@ -2,10 +2,19 @@ import React, { Fragment, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Repos from './Repos';
 
-const UserDetails = ({ match, loading, getUserDetails, user }) => {
+const UserDetails = ({
+    match,
+    loading,
+    getUserDetails,
+    getUserRepos,
+    user,
+    repos,
+}) => {
     useEffect(() => {
         getUserDetails(match.params.login);
+        getUserRepos(match.params.login);
     }, []);
     const {
         name,
@@ -26,6 +35,8 @@ const UserDetails = ({ match, loading, getUserDetails, user }) => {
     if (loading) {
         return <LoadingSpinner />;
     }
+
+    console.log(repos);
 
     return (
         <Fragment>
@@ -100,6 +111,7 @@ const UserDetails = ({ match, loading, getUserDetails, user }) => {
                     Public Gists: {public_gists}
                 </div>
             </div>
+            <Repos repos={repos} />
         </Fragment>
     );
 };
@@ -111,6 +123,8 @@ UserDetails.propTypes = {
     }).isRequired,
     loading: PropTypes.bool.isRequired,
     getUserDetails: PropTypes.func.isRequired,
+    getUserRepos: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
+    repos: PropTypes.array.isRequired,
 };
 export default UserDetails;

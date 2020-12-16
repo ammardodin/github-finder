@@ -11,9 +11,12 @@ import { useAlert } from 'react-alert';
 
 const App = () => {
     const alert = useAlert();
+
     const [users, setUsers] = useState([]);
     const [user, setUser] = useState({});
+    const [userRepos, setUserRepos] = useState([]);
     const [loading, setLoading] = useState(true);
+
     const searchUsers = ({ location = '', language = '' }) => {
         const terms = [];
         if (language.length > 0) {
@@ -55,6 +58,20 @@ const App = () => {
                 },
             })
             .then(({ data }) => setUser(data))
+            .catch(() => alert.show("Something's gone wrong. Please try again"))
+            .finally(() => setLoading(false));
+    };
+    const getUserRepos = (login) => {
+        setLoading(true);
+        const qs = 'repos?type=all&sort=updated&direction=desc';
+        axios
+            .get(`https://api.github.com/users/${login}/repos?${qs}`, {
+                params: {
+                    client_id: process.env.GITHUB_CLIENT_ID,
+                    client_secret: process.env.GITHUB_CLIENT_SECRET,
+                },
+            })
+            .then(({ data }) => setUserRepos(data))
             .catch(() => alert.show("Something's gone wrong. Please try again"))
             .finally(() => setLoading(false));
     };
@@ -104,8 +121,10 @@ const App = () => {
                                 <UserDetails
                                     {...props}
                                     getUserDetails={getUserDetails}
+                                    getUserRepos={getUserRepos}
                                     loading={loading}
                                     user={user}
+                                    repos={userRepos}
                                 />
                             )}
                         />
